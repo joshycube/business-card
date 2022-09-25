@@ -1,23 +1,23 @@
-import { atom, selector } from "recoil";
+import { atomFamily, selectorFamily } from "recoil";
 
-import { UserItem } from "../types";
+const API_URL = `https://reqres.in/api/users`;
 
-const API_URL = `https://reqres.in/api/users?per_page=12`;
-
-export const usersState = atom<UserItem[]>({
+export const usersState = atomFamily({
   key: "UsersState",
-  default: selector({
+  default: selectorFamily({
     key: "UsersState/Default",
-    get: async () => {
-      const response = await fetch(API_URL, {
-        mode: "cors",
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
+    get:
+      (queryParams: string = "") =>
+      async () => {
+        const response = await fetch(`${API_URL}?${queryParams}`, {
+          mode: "cors",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+          },
+        });
 
-      const userObject = await response.json();
-      return userObject.data;
-    },
+        const userObject = await response.json();
+        return userObject.data;
+      },
   }),
 });
