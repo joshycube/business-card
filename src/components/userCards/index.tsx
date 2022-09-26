@@ -5,7 +5,7 @@ import { UserItem } from "../../types";
 import UserCard from "./userCard";
 
 const UserCards = () => {
-  const users = useRecoilValue<UserItem[]>(usersState("per_page=12"));
+  const users = useRecoilValue<UserItem[]>(usersState);
 
   return (
     <ul>
