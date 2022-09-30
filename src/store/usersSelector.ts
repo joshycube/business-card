@@ -13,6 +13,6 @@ export const usersLimiter = selectorFamily({
     });
 
     const userObject = await response.json();
-    return userObject.data;
+    return userObject;
   },
 });

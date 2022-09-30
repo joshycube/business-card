@@ -1,3 +1,11 @@
+export interface Users {
+  data: UserItem[];
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+}
+
 export interface UserItem {
   id: string;
   first_name: string;

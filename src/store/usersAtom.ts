@@ -15,7 +15,7 @@ export const usersState = atom({
       });
 
       const userObject = await response.json();
-      return userObject.data;
+      return userObject;
     },
   }),
 });

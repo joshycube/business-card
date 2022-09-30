@@ -6,8 +6,8 @@ import UserPager from "./components/userPager";
 function App() {
   return (
     <div className="App">
-      <UserPager />
       <React.Suspense fallback={<div>Loading...</div>}>
+        <UserPager />
         <UserCards />
       </React.Suspense>
     </div>
