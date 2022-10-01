@@ -1,11 +1,23 @@
 import { UserItem } from "../../types";
 
-const UserCard = ({ first_name, last_name, email, avatar }: UserItem) => {
+interface Props extends UserItem {
+  deleteUser: (id: string) => void;
+}
+
+const UserCard = ({
+  deleteUser,
+  id,
+  first_name,
+  last_name,
+  email,
+  avatar,
+}: Props) => {
   return (
     <li>
       <ul>
         <li>
-          {first_name} {last_name}
+          {first_name} {last_name}{" "}
+          <button onClick={() => deleteUser(id)}>Delete</button>
         </li>
         <li>
           <img width="50" alt="userImage" src={avatar} />
