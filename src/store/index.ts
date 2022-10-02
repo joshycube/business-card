@@ -1,6 +1,12 @@
 import { atom, selector, useRecoilState } from "recoil";
 
-import { getUsersQuery, deleteUserQuery } from "./api";
+import {
+  getUsersQuery,
+  deleteUserQuery,
+  updateUserQuery,
+  addUserQuery,
+  getOneUserQuery,
+} from "./api";
 import { UserItem } from "../types";
 
 export const usersState = atom({
@@ -13,12 +19,58 @@ export const usersState = atom({
   }),
 });
 
+export const userState = atom({
+  key: "UserState/Default",
+  default: {
+    id: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    avatar: "",
+  },
+});
+
 export function useUsersMutations() {
   const [users, setUsers] = useRecoilState(usersState);
+  const [user, setUser] = useRecoilState(userState);
 
   const getUsersWithQuery = async (queryParam: string) => {
     const queriedUsers = await getUsersQuery(queryParam);
     setUsers(queriedUsers);
+  };
+
+  const updateUser = async (id: string, formData: any) => {
+    await updateUserQuery(id, formData);
+    setUsers({
+      ...users,
+      data: [
+        ...users.data,
+        {
+          id,
+          ...formData,
+        },
+      ],
+    });
+  };
+
+  const getUser = async (id: string) => {
+    const userDetails = await getOneUserQuery(id);
+
+    setUser(userDetails.data);
+  };
+
+  const createUser = async (formData: any) => {
+    const newUser = await addUserQuery(formData);
+    setUsers({
+      ...users,
+      data: [
+        ...users.data,
+        {
+          id: newUser.id,
+          ...formData,
+        },
+      ],
+    });
   };
 
   const deleteUser = async (id: string) => {
@@ -30,5 +82,5 @@ export function useUsersMutations() {
     });
   };
 
-  return { deleteUser, getUsersWithQuery };
+  return { deleteUser, getUsersWithQuery, updateUser, createUser, getUser };
 }

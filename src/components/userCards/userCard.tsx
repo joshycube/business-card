@@ -2,10 +2,12 @@ import { UserItem } from "../../types";
 
 interface Props extends UserItem {
   deleteUser: (id: string) => void;
+  getUser: (id: string) => void;
 }
 
 const UserCard = ({
   deleteUser,
+  getUser,
   id,
   first_name,
   last_name,
@@ -16,7 +18,9 @@ const UserCard = ({
     <li>
       <ul>
         <li>
-          {first_name} {last_name}{" "}
+          <button onClick={() => getUser(id)}>
+            {first_name} {last_name}
+          </button>
           <button onClick={() => deleteUser(id)}>Delete</button>
         </li>
         <li>
