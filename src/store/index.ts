@@ -8,7 +8,7 @@ export const usersState = atom({
   default: selector({
     key: "UsersState/Default",
     get: async () => {
-      return await getUsersQuery("");
+      return await getUsersQuery("per_page=12");
     },
   }),
 });

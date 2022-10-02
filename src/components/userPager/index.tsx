@@ -12,15 +12,6 @@ const UserPager = () => {
   const users = useRecoilValue<Users>(usersState);
   const { getUsersWithQuery } = useUsersMutations();
 
-  const limitUsers = useRecoilCallback(
-    ({ set }) =>
-      async (text: string) => {
-        const newState = getUsersWithQuery(text);
-        set(usersState, newState);
-      },
-    [limit]
-  );
-
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let pp = "12";
 
@@ -29,7 +20,7 @@ const UserPager = () => {
     }
 
     setLimit(pp);
-    limitUsers(`per_page=${pp}`);
+    getUsersWithQuery(`per_page=${pp}`);
   };
 
   const stepPrev = () => {
@@ -45,7 +36,7 @@ const UserPager = () => {
 
     setPrevPage(prevPage);
     setNextPage(prevPage + 1);
-    limitUsers(`per_page=${limit}&page=${prevPage}`);
+    getUsersWithQuery(`per_page=${limit}&page=${prevPage}`);
   };
 
   const stepNext = () => {
@@ -61,7 +52,7 @@ const UserPager = () => {
 
     setNextPage(nextPage);
     setPrevPage(nextPage - 1);
-    limitUsers(`per_page=${limit}&page=${nextPage}`);
+    getUsersWithQuery(`per_page=${limit}&page=${nextPage}`);
   };
 
   return (
@@ -74,7 +65,7 @@ const UserPager = () => {
       <button
         onClick={stepNext}
         id="nextPageBtn"
-        disabled={nextPage === users.total_pages}
+        disabled={nextPage + 1 === users.total_pages}
       >
         &raquo;
       </button>
