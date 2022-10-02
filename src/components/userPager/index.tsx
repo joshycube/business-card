@@ -1,13 +1,11 @@
 import React from "react";
-import { useRecoilCallback, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 
 import { Users } from "../../types";
 import { usersState, useUsersMutations } from "../../store";
 
 const UserPager = () => {
   const [limit, setLimit] = React.useState("per_page=12");
-  const [nextPage, setNextPage] = React.useState(0);
-  const [prevPage, setPrevPage] = React.useState(0);
 
   const users = useRecoilValue<Users>(usersState);
   const { getUsersWithQuery } = useUsersMutations();
@@ -34,8 +32,6 @@ const UserPager = () => {
       prevPage = users.page - 1;
     }
 
-    setPrevPage(prevPage);
-    setNextPage(prevPage + 1);
     getUsersWithQuery(`per_page=${limit}&page=${prevPage}`);
   };
 
@@ -50,8 +46,6 @@ const UserPager = () => {
       nextPage = users.page + 1;
     }
 
-    setNextPage(nextPage);
-    setPrevPage(nextPage - 1);
     getUsersWithQuery(`per_page=${limit}&page=${nextPage}`);
   };
 
@@ -59,13 +53,17 @@ const UserPager = () => {
     <div>
       <label>Items per page</label>
       <input type="text" onChange={onChange} />
-      <button onClick={stepPrev} id="prevPageBtn" disabled={prevPage === 0}>
+      <button
+        onClick={stepPrev}
+        id="prevPageBtn"
+        disabled={users.page - 1 === 0}
+      >
         &laquo;
       </button>
       <button
         onClick={stepNext}
         id="nextPageBtn"
-        disabled={nextPage + 1 === users.total_pages}
+        disabled={users.page === users.total_pages}
       >
         &raquo;
       </button>
