@@ -11,18 +11,30 @@ const UserCards = () => {
   const user = useRecoilValue<UserItem>(userState);
   const { deleteUser, getUser } = useUsersMutations();
 
+  const [showUserDetails, toggleShowUserDetails] = React.useState(false);
+
+  const getUserHandler = (id: string) => {
+    toggleShowUserDetails(true);
+    getUser(id);
+  };
+
+  const deleteUserHandler = (id: string) => {
+    toggleShowUserDetails(false);
+    deleteUser(id);
+  };
+
   return (
     <>
-      {user?.id !== "" ? (
+      {user?.id !== "" && showUserDetails ? (
         <div>
-          <UserDetails deleteUser={deleteUser} userDetails={user} />
+          <UserDetails deleteUser={deleteUserHandler} userDetails={user} />
         </div>
       ) : null}
       <ul>
         {users?.data?.map((user: UserItem) => (
           <UserCard
-            getUser={getUser}
-            deleteUser={deleteUser}
+            getUser={getUserHandler}
+            deleteUser={deleteUserHandler}
             key={user.id}
             {...user}
           />
