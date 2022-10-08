@@ -6,12 +6,17 @@ import { UserItem, Users } from "../../types";
 import UserCard from "./userCard";
 import UserDetails from "../userDetails";
 
-const UserCards = () => {
+interface Props {
+  editUserHandler: (id: string) => void;
+}
+
+const UserCards = ({ editUserHandler }: Props) => {
   const users = useRecoilValue<Users>(usersState);
   const user = useRecoilValue<UserItem>(userState);
-  const { deleteUser, getUser } = useUsersMutations();
 
-  const [showUserDetails, toggleShowUserDetails] = React.useState(false);
+  const { deleteUser, getUser } = useUsersMutations();
+  const [showUserDetails, toggleShowUserDetails] =
+    React.useState<boolean>(false);
 
   const getUserHandler = (id: string) => {
     toggleShowUserDetails(true);
@@ -33,6 +38,7 @@ const UserCards = () => {
       <ul>
         {users?.data?.map((user: UserItem) => (
           <UserCard
+            editUser={editUserHandler}
             getUser={getUserHandler}
             deleteUser={deleteUserHandler}
             key={user.id}

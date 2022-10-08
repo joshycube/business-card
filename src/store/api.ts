@@ -13,15 +13,21 @@ export const getUsersQuery = async (queryParam: string) => {
 };
 
 export const getOneUserQuery = async (id: string) => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    mode: "cors",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-
-  const userObject = await response.json();
-  return userObject;
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      mode: "cors",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+    const userObject = await response.json();
+    if (!userObject.id) {
+      throw new Error();
+    }
+    return userObject;
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const updateUserQuery = async (id: string, formData: any) => {

@@ -3,11 +3,13 @@ import { UserItem } from "../../types";
 interface Props extends UserItem {
   deleteUser: (id: string) => void;
   getUser: (id: string) => void;
+  editUser: (id: string) => void;
 }
 
 const UserCard = ({
   deleteUser,
   getUser,
+  editUser,
   id,
   first_name,
   last_name,
@@ -21,6 +23,7 @@ const UserCard = ({
           <button onClick={() => getUser(id)}>
             {first_name} {last_name}
           </button>
+          <button onClick={() => editUser(id)}>Edit</button>
           <button onClick={() => deleteUser(id)}>Delete</button>
         </li>
         <li>

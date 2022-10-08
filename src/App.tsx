@@ -1,7 +1,6 @@
 import React from "react";
 
-import UserCards from "./components/userCards";
-import UserForm from "./components/userForm";
+import User from "./components/users";
 import UserPager from "./components/userPager";
 
 function App() {
@@ -9,8 +8,7 @@ function App() {
     <div className="App">
       <React.Suspense fallback={<div>Loading...</div>}>
         <UserPager />
-        <UserForm />
-        <UserCards />
+        <User />
       </React.Suspense>
     </div>
   );

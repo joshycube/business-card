@@ -32,6 +32,7 @@ export const userState = atom({
 
 export function useUsersMutations() {
   const [users, setUsers] = useRecoilState(usersState);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [user, setUser] = useRecoilState(userState);
 
   const getUsersWithQuery = async (queryParam: string) => {
@@ -44,33 +45,42 @@ export function useUsersMutations() {
     setUsers({
       ...users,
       data: [
-        ...users.data,
-        {
-          id,
-          ...formData,
-        },
+        ...users.data.map((user: UserItem) => {
+          if (user.id === formData.id) {
+            return {
+              id: formData.id,
+              ...formData,
+            };
+          }
+          return user;
+        }),
       ],
     });
+    alert("Successful update!");
   };
 
   const getUser = async (id: string) => {
-    const userDetails = await getOneUserQuery(id);
-
-    setUser(userDetails.data);
+    try {
+      const userDetails = await getOneUserQuery(id);
+      setUser(userDetails.data);
+    } catch (error) {
+      console.log(error);
+      alert("User can not be found!");
+    }
   };
 
-  const createUser = async (formData: any) => {
+  const getUserById = (id: string) => {
+    const [user] = users.data.filter((user: UserItem) => user.id === id);
+    return user;
+  };
+
+  const createUser = async (formData: UserItem) => {
     const newUser = await addUserQuery(formData);
     setUsers({
       ...users,
-      data: [
-        ...users.data,
-        {
-          id: newUser.id,
-          ...formData,
-        },
-      ],
+      data: [{ ...formData, id: newUser.id }, ...users.data],
     });
+    alert(`Successful creation: ID: ${newUser.id} When: ${newUser.createdAt}`);
   };
 
   const deleteUser = async (id: string) => {
@@ -80,7 +90,15 @@ export function useUsersMutations() {
       ...users,
       data: [...newUsers],
     });
+    alert("Successful deletion!");
   };
 
-  return { deleteUser, getUsersWithQuery, updateUser, createUser, getUser };
+  return {
+    deleteUser,
+    getUsersWithQuery,
+    updateUser,
+    createUser,
+    getUser,
+    getUserById,
+  };
 }

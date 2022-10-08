@@ -15,7 +15,8 @@ export interface Error {
 export type UserFormDataActionType =
   | "FIRST_NAME_CHANGE"
   | "LAST_NAME_CHANGE"
-  | "EMAIL_CHANGEE";
+  | "EMAIL_CHANGE"
+  | "POPULATE_FORM";
 
 export interface UserFormDataAction {
   type: UserFormDataActionType;
@@ -27,6 +28,7 @@ export const ACTIONS = {
   lastNameChange: "LAST_NAME_CHANGE",
   emailChange: "EMAIL_CHANGE",
   clearForm: "CLEAR_FORM",
+  populateForm: "POPULATE_FORM",
 };
 
 const defaultState = {
@@ -114,8 +116,10 @@ function formReducer(
         errors = clearError(state, "email");
       }
       return { ...state, email: action.payload, errors };
+    case ACTIONS.populateForm:
+      return { ...state, ...action.payload };
     case ACTIONS.clearForm:
-      return { ...defaultState };
+      return defaultState;
     default:
       return state;
   }
@@ -123,18 +127,33 @@ function formReducer(
 
 export interface Props {
   editFormUserData?: UserFormData;
+  onSubmitHandler: (data: UserFormData) => void;
 }
 
-const UserCardForm = ({ editFormUserData }: Props) => {
+const UserCardForm = ({ editFormUserData, onSubmitHandler }: Props) => {
   const initialState: UserFormData & { errors?: Error[] } =
     editFormUserData || defaultState;
 
   const [state, dispatch] = React.useReducer(formReducer, initialState);
 
+  React.useEffect(() => {
+    dispatch({
+      type: ACTIONS.populateForm as UserFormDataActionType,
+      payload: editFormUserData,
+    });
+  }, [dispatch, editFormUserData]);
+
   const onSubmit = () => {
     if (state.errors && !!state.errors.length) {
       return false;
     }
+
+    onSubmitHandler(state);
+
+    dispatch({
+      type: ACTIONS.clearForm as UserFormDataActionType,
+      payload: initialState,
+    });
   };
 
   return (
