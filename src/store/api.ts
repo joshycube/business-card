@@ -21,7 +21,7 @@ export const getOneUserQuery = async (id: string) => {
       },
     });
     const userObject = await response.json();
-    if (!userObject.id) {
+    if (!userObject?.data?.id) {
       throw new Error();
     }
     return userObject;
