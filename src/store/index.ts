@@ -56,6 +56,8 @@ export function useUsersMutations() {
         }),
       ],
     });
+
+    setUser(formData);
     alert("Successful update!");
   };
 

@@ -32,13 +32,16 @@ const UserCards = ({ editUserHandler }: Props) => {
     <>
       {user?.id !== "" && showUserDetails ? (
         <div>
-          <UserDetails deleteUser={deleteUserHandler} userDetails={user} />
+          <UserDetails
+            editUser={editUserHandler}
+            deleteUser={deleteUserHandler}
+            userDetails={user}
+          />
         </div>
       ) : null}
       <ul>
         {users?.data?.map((user: UserItem) => (
           <UserCard
-            editUser={editUserHandler}
             getUser={getUserHandler}
             deleteUser={deleteUserHandler}
             key={user.id}
